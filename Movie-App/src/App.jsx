@@ -3,6 +3,7 @@ import { useDebounce } from "react-use";
 import Search from "./components/Search";
 import { Spinner } from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
+import { updateSearchCount } from "./appwrite";
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -50,6 +51,10 @@ const App = () => {
       }
 
       setMovieList(data.results || []);
+
+      if(query && data.results.length > 0){
+        await updateSearchCount(query, data.results[0]);
+      }
 
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
@@ -100,3 +105,12 @@ const App = () => {
 export default App
 
 // 1.24
+
+
+// git clone https://github.com/appwrite/starter-for-react
+// cd starter-for-react
+
+// VITE_APPWRITE_PROJECT_ID = "690c1db800197d53e7bf"
+// VITE_APPWRITE_PROJECT_NAME = "Movie App"
+// VITE_APPWRITE_ENDPOINT = "https://syd.cloud.appwrite.io/v1"
+
